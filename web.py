@@ -1,3 +1,4 @@
+import re
 import requests
 import bs4
 from urllib.parse import urljoin
@@ -11,21 +12,34 @@ headers = {
 
 response = requests.get(url, headers=headers)
 data=response.text
-newData=bs4.BeautifulSoup(data, 'html.parser')
-title=newData.find("title").text
+if response.status_code == 200:
+    newData=bs4.BeautifulSoup(data, 'html.parser')
+    title=newData.find("title").text
 
-meta=newData.find("meta",attrs={'name':'keywords'})
+    caption=newData.find_all(attrs={'class':'title'})
+    allImg=newData.find_all(attrs={'class':'img-fluid'})
 
-script=newData.find_all("script",src=True)
+    mylist=[]
+    print(title)
+    for i in caption:
+        mylist.append(i.text)
+    mylist_clean = [re.sub('[\n\t]', ' ', i).strip() for i in mylist]
+    print(mylist_clean)
 
-meta2=newData.find_all('meta',content=True)
+    for num,i in enumerate(allImg,1):
+        urlImg=i.get('src')
+        full_img_url = urljoin(url,urlImg)
+        print(f"url of images {num}= {full_img_url}")
 
-print(title)
-# print(meta['content'])
-# print(script[0])
-for item in meta2:
-    print(f"\n ${item['content']}")
+else:
+    print("error in loading page")
 
+
+# meta=newData.find("meta",attrs={'name':'keywords'})
+#
+# script=newData.find_all("script",src=True)
+#
+# meta2=newData.find_all('meta',content=True)
 
 
 # if response.status_code == 200:
