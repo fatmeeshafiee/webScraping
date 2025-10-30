@@ -1,0 +1,16 @@
+# PyCharm / JetBrains
+.idea/
+
+# Virtual environments
+venv/
+
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
